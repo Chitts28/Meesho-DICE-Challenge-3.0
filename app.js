@@ -8,7 +8,7 @@ let T = [];
 const clearT = () => { T.forEach(clearInterval); T = []; };
 
 /* ---------------- phone building blocks ---------------- */
-const sb = (t = 'd') => `<div class="sb ${t}"><span>9:41</span><span>4G ▂▄▆ 82%</span></div>`;
+const sb = (t = 'd') => `<div class="sb ${t}"><span>${window.CLK || '9:41'}</span><span>4G ▂▄▆ 82%</span></div>`;
 const waHead = () => `${sb('w')}<div class="ab wa"><div class="av">m</div><div class="t">Meesho<span class="tick">✓</span><small>Official business account</small></div></div>`;
 const appHead = (t, sub = '', v = false) => `${sb()}<div class="ab"><div class="av ${v ? 'v' : ''}">${v ? 'V' : 'm'}</div><div class="t">${t}${sub ? `<small>${sub}</small>` : ''}</div></div>`;
 const msg = (h, tm = '8:05 am', cls = '') => `<div class="msg ${cls}">${h}<div class="tm">${tm}</div></div>`;
@@ -25,7 +25,7 @@ const A = {
   toast(m) { const o = $('#ov'); const d = document.createElement('div'); d.className = 'toast'; d.innerHTML = m; o.appendChild(d); setTimeout(() => d.remove(), 2800); },
   sheet(h) { $('#ov').innerHTML = `<div class="dim" onclick="A.close()"></div><div class="sheet"><div class="grab"></div>${h}</div>`; },
   close() { $('#ov').innerHTML = ''; },
-  tab(v, role) { V.view = v; V.role = role || (v === 'home' ? null : Object.keys(R[v])[0]); V.scr = v === 'home' ? null : R[v][V.role].start(); clearT(); render(); scrollTo(0, 0); },
+  tab(v, role) { V.view = v; const flat = !R[v]; V.role = flat ? null : (role || Object.keys(R[v])[0]); V.scr = flat ? null : R[v][V.role].start(); clearT(); render(); scrollTo(0, 0); },
   role(r) { V.role = r; V.scr = R[V.view][r].start(); clearT(); render(); },
   scen(n) { V.st = { normal: n }; V.scr = R.s1.cust.start(); clearT(); render(); },
 };
@@ -276,14 +276,14 @@ const S2 = {
  r1: { p: 'r1', h: () => `${appHead('Stop 14 · Priya', 'Valmo Rider · Ramesh', true)}<div class="body">
    <div class="map new"><div class="ring" style="left:34%;top:18%;width:100px;height:100px"></div><div class="pin" style="left:46%;top:36%"></div><div class="lb" style="left:6%;top:6%">Last handover point</div></div>
    <div class="row b"><span>Landmark</span><span class="v">Hanuman Mandir</span></div>
-   <div class="card new" style="background:var(--greenL)">Address confidence: <b>High</b> · delivered here 3 times<div class="small">Check radius 100 m</div></div>
+   <div class="card new" style="background:var(--greenL)">Address confidence: <b>High</b> · delivered here 3 times</div>
    <div class="card new" style="background:var(--orgL)">Plan: <b>Leave with Sunita</b> · code needed</div>
    <button class="btn pl" onclick="A.go('r2')">Start navigation</button></div>` },
  r2: { p: 'r2', h: () => `${appHead('Attempt checks', 'Stop 14 · Priya', true)}<div class="body"><div id="cks"></div>
    <button class="btn new" id="mnr" disabled onclick="A.go('r3')">Mark not reachable</button><div class="small ctr" id="mnrh" style="margin-top:8px">Unlocks when every tick is green</div>
    <button class="btn g" onclick="A.toast('Delivered. Code 7316 checked.')">Customer came out → Delivered</button>
    ${demo([['Rider leaves early (skips the checks)', "A.go('r4')"]])}</div>`,
-   m: () => { let t = 0; const draw = () => { const w = Math.min(t, 90), all = t >= 90; $('#cks').innerHTML = ck('Inside 100 m', 'ok') + ck('Waiting', all ? 'ok' : '', `${Math.floor(w / 60)}:${String(w % 60).padStart(2, '0')} / 1:30`) + ck('Call 1 · 3:38 pm', t >= 15 ? 'ok' : '') + ck('Call 2 at 3:40 pm', t >= 75 ? 'ok' : '', 'spaced 2 min') + ck('WhatsApp ping sent', t >= 20 ? 'ok' : ''); const b = $('#mnr'); b.disabled = !all; b.className = 'btn new ' + (all ? 'rd' : ''); $('#mnrh').textContent = all ? 'All checks green: visit proven' : 'Unlocks when every tick is green'; }; draw(); T.push(setInterval(() => { t += 3; draw(); if (t > 95) clearT(); }, 160)); } },
+   m: () => { let t = 0; const draw = () => { const w = Math.min(t, 90), all = t >= 90; $('#cks').innerHTML = ck('At the address · GPS verified', 'ok') + ck('Waiting', all ? 'ok' : '', `${Math.floor(w / 60)}:${String(w % 60).padStart(2, '0')} / 1:30`) + ck('Call 1 · 3:38 pm', t >= 15 ? 'ok' : '') + ck('Call 2 at 3:40 pm', t >= 75 ? 'ok' : '', 'spaced 2 min') + ck('WhatsApp ping sent', t >= 20 ? 'ok' : ''); const b = $('#mnr'); b.disabled = !all; b.className = 'btn new ' + (all ? 'rd' : ''); $('#mnrh').textContent = all ? 'All checks green: visit proven' : 'Unlocks when every tick is green'; }; draw(); T.push(setInterval(() => { t += 3; draw(); if (t > 95) clearT(); }, 160)); } },
  r3: { p: 'r3', h: () => `${appHead('Attempt result', 'Stop 14 · Priya', true)}<div class="body"><div class="ctr" style="color:var(--green);font-weight:700;font-size:18px">Attempt verified</div>
    <div class="card new ctr" style="margin-top:10px"><b>+₹3 added to today's pay</b></div>${ck('Customer notified on WhatsApp', 'ok')}${ck('Parcel → retry tomorrow', 'ok')}
    <div class="row b"><span>Today</span><span class="v">₹9 · 3 verified</span></div><button class="btn pl" onclick="A.go('r1')">Next stop · 15 / 52</button>
@@ -326,7 +326,8 @@ const SC = { s1: S1, s2: S2 };
 /* ---------------- landing ---------------- */
 function home() {
   return `<section class="hero"><h1>17 of every 100 Valmo parcels come back. This prototype shows the two fixes we would ship first.</h1>
-   <p>Each solution is clickable from every side it touches: the buyer, the rider, the hub, the nearby shop. Screens follow the wireframes in our Round 2 deck. <b>Orange dashed outline</b> marks what is new on each screen; grey <b>Demo</b> buttons simulate what happens next.</p>
+   <div class="cta"><button class="btn o" onclick="A.tab('live')">▶ Play the live demo · one order, every side (3 min)</button><button class="btn ln" onclick="A.tab('impact')">See the impact at Valmo scale</button></div>
+   <p>Start with the <b>live demo</b>: four short stories, each following one order across the buyer, rider, hub, a Valmo Point shop and a nearby buyer, ending with what that parcel costs Valmo today vs with our fix. Or browse every screen by role below. Each solution is clickable from every side it touches: the buyer, the rider, the hub, the nearby shop. Screens follow the wireframes in our Round 2 deck. <b>Orange dashed outline</b> marks what is new on each screen; grey <b>Demo</b> buttons simulate what happens next.</p>
    <div class="kpis"><div><b>17%</b><span>RTO on Valmo (80% COD × 20% + 20% prepaid × 5%)</span></div><div><b>₹170</b><span>lost per RTO (₹50 forward + ₹120 reverse)</span></div><div><b>210</b><span>COD shoppers surveyed by the team</span></div><div><b>2</b><span>solutions, prototyped across 8 roles</span></div></div></section>
    <section class="sols">
     <div class="sol"><h3>1 · Commit-to-COD</h3><div class="sub">For buyers who <b>won't</b> take the parcel: refusal, changed mind, ordered elsewhere</div>
@@ -341,9 +342,12 @@ function home() {
 
 /* ---------------- render ---------------- */
 function render() {
-  $('#tabs').innerHTML = [['home', 'Overview'], ['s1', '1 · Commit-to-COD'], ['s2', '2 · Sure-Meet']].map(([k, l]) => `<button class="${V.view === k ? 'on' : ''}" onclick="A.tab('${k}')">${l}</button>`).join('');
+  $('#tabs').innerHTML = [['home', 'Overview'], ['live', '▶ Live demo'], ['s1', 'Commit-to-COD screens'], ['s2', 'Sure-Meet screens'], ['impact', 'Impact']].map(([k, l]) => `<button class="${V.view === k ? 'on' : ''}" onclick="A.tab('${k}')">${l}</button>`).join('');
   const app = $('#app');
+  window.CLK = null;
   if (V.view === 'home') { app.innerHTML = home(); return; }
+  if (V.view === 'live') { app.innerHTML = LIVE.view(); LIVE.mount(); return; }
+  if (V.view === 'impact') { app.innerHTML = IMPACT.view(); IMPACT.mount(); return; }
   const sol = V.view, roles = R[sol], role = roles[V.role], sc = SC[sol][V.scr], p = P[sol][sc.p];
   const steps = role.steps(), idx = steps.findIndex(s => s[0] === sc.p);
   const firstScr = k => k; // panel key == entry screen id
