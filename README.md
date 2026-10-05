@@ -2,7 +2,7 @@
 
 Clickable prototype for our Meesho DICE Challenge S3 Business Track entry (Valmo RTO case).
 
-**Live demo:** https://chitts28.github.io/valmo-rto-prototype/ 
+**Live demo:** [https://chitts28.github.io/valmo-rto-prototype/ ](https://chitts28.github.io/Meesho-DICE-Challenge-3.0/)
 
 It turns the wireframes in our Round 2 deck into working screens, shown from every side each solution touches.
 
